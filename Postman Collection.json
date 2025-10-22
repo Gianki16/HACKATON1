@@ -1,0 +1,580 @@
+{
+  "info": {
+    "name": "Oreo Insight Factory - Hackathon #1",
+    "description": "Colección completa para validar el backend de Oreo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "centralToken",
+      "value": ""
+    },
+    {
+      "key": "branchToken",
+      "value": ""
+    },
+    {
+      "key": "centralUserId",
+      "value": ""
+    },
+    {
+      "key": "saleId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Register CENTRAL User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response has user ID', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.id).to.exist;",
+              "    pm.collectionVariables.set('centralUserId', jsonData.id);",
+              "});",
+              "",
+              "pm.test('User has CENTRAL role', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.role).to.eql('CENTRAL');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"oreo.admin\",\n  \"email\": \"admin@oreo.com\",\n  \"password\": \"Oreo1234\",\n  \"role\": \"CENTRAL\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "2. Login CENTRAL User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has token', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.token).to.exist;",
+              "    pm.collectionVariables.set('centralToken', jsonData.token);",
+              "});",
+              "",
+              "pm.test('User has CENTRAL role', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.role).to.eql('CENTRAL');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"oreo.admin\",\n  \"password\": \"Oreo1234\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "3. Register BRANCH User (Miraflores)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('User has BRANCH role', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.role).to.eql('BRANCH');",
+              "    pm.expect(jsonData.branch).to.eql('Miraflores');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"miraflores.user\",\n  \"email\": \"mira@oreo.com\",\n  \"password\": \"Oreo1234\",\n  \"role\": \"BRANCH\",\n  \"branch\": \"Miraflores\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "4. Login BRANCH User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has token', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.token).to.exist;",
+              "    pm.collectionVariables.set('branchToken', jsonData.token);",
+              "});",
+              "",
+              "pm.test('User has BRANCH role', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.role).to.eql('BRANCH');",
+              "    pm.expect(jsonData.branch).to.eql('Miraflores');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"miraflores.user\",\n  \"password\": \"Oreo1234\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "5. Create Sale 1 (Miraflores) - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Sale created successfully', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.id).to.exist;",
+              "    pm.collectionVariables.set('saleId', jsonData.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"OREO_CLASSIC_12\",\n  \"units\": 25,\n  \"price\": 1.99,\n  \"branch\": \"Miraflores\",\n  \"soldAt\": \"2025-09-01T10:30:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "6. Create Sale 2 (Miraflores) - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"OREO_DOUBLE\",\n  \"units\": 40,\n  \"price\": 2.49,\n  \"branch\": \"Miraflores\",\n  \"soldAt\": \"2025-09-02T15:10:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "7. Create Sale 3 (San Isidro) - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"OREO_THINS\",\n  \"units\": 32,\n  \"price\": 2.19,\n  \"branch\": \"San Isidro\",\n  \"soldAt\": \"2025-09-03T11:05:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "8. Create Sale 4 (San Isidro) - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"OREO_DOUBLE\",\n  \"units\": 55,\n  \"price\": 2.49,\n  \"branch\": \"San Isidro\",\n  \"soldAt\": \"2025-09-04T18:50:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "9. Create Sale 5 (Miraflores) - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"OREO_CLASSIC_12\",\n  \"units\": 20,\n  \"price\": 1.99,\n  \"branch\": \"Miraflores\",\n  \"soldAt\": \"2025-09-05T09:40:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "10. List All Sales - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response contains sales', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.content).to.be.an('array');",
+              "    pm.expect(jsonData.content.length).to.be.at.least(5);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "11. List Sales - BRANCH (Only Miraflores)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Only Miraflores sales returned', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.content).to.be.an('array');",
+              "    jsonData.content.forEach(function(sale) {",
+              "        pm.expect(sale.branch).to.eql('Miraflores');",
+              "    });",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{branchToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "12. Request Async Summary - BRANCH",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 202 Accepted', function () {",
+              "    pm.response.to.have.status(202);",
+              "});",
+              "",
+              "pm.test('Response has requestId', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.requestId).to.exist;",
+              "    pm.expect(jsonData.status).to.eql('PROCESSING');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{branchToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"from\": \"2025-09-01\",\n  \"to\": \"2025-09-07\",\n  \"emailTo\": \"test@oreo.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales/summary/weekly",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales", "summary", "weekly"]
+        }
+      }
+    },
+    {
+      "name": "13. Try Create Sale Other Branch - BRANCH (Should Fail)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 403 Forbidden', function () {",
+              "    pm.response.to.have.status(403);",
+              "});",
+              "",
+              "pm.test('Error message is correct', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.error).to.eql('FORBIDDEN');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{branchToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sku\": \"OREO_CLASSIC_12\",\n  \"units\": 10,\n  \"price\": 1.99,\n  \"branch\": \"San Isidro\",\n  \"soldAt\": \"2025-09-06T10:30:00Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sales",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales"]
+        }
+      }
+    },
+    {
+      "name": "14. Delete Sale - CENTRAL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 204 No Content', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{centralToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/sales/{{saleId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["sales", "{{saleId}}"]
+        }
+      }
+    }
+  ]
+}
